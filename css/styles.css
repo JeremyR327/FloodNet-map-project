@@ -1,0 +1,29 @@
+#mapContainer {
+  top: 100px;
+  backgroundColor: #ccc;
+  flex-grow: 1
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: sans-serif;
+}
+
+.container {
+  display: flex;
+  height: 100%;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  bottom: 0px;
+  padding: 2px;
+}
+
+.sidebar h3 {
+  font-size: 30px;
+  text-align: center;
+}
