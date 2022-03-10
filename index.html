@@ -5,18 +5,32 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>My first web map</title>
+  <title>FloodNet NYC Sensor Locations</title>
 
-  <link href='https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 
 </head>
 
 <body>
   <div class='container'>
-    <div class='sidebar'>
+    <div class='header'>
+      <img src='https://www.floodnet.nyc/wp-content/uploads/2021/04/floodnet_logomark-2.png'>
+            <button class="button-10 " id='toggle-theme1' role="button">SVI - Socioeconomic Status</button>
+            <button class="button-10 " id='toggle-theme2' role="button">SVI - Household Composition & Disability</button>
+            <button class="button-10 " id='toggle-theme3' role="button">SVI - Minority Status & Language</button>
+            <button class="button-10 " id='toggle-theme4' role="button">SVI - Housing Type & Transportation</button><br>
+            <button class="button-10 " id='toggle-flood' role="button">Toggle Floodplain</button>
       <h3>FloodNet NYC Sensor Locations</h3>
+      
     </div>
+    <!-- <div class='sidebar'>
+      <button class="button-10" id='fly-to-midtown' role="button">Fly to Midtown Manhattan</button>
+      <button class="button-10" id='fly-to-jfk' role="button">Fly to JFK Airport</button>
+      <button class="button-10" id='toggle-population' role="button">Toggle Population Layer</button>
+      <div id='sidebar-content-area'>
+      </div>
+    </div> -->
     <div id='mapContainer'>
     <!-- this is where mapboxGL will insert the map -->
     </div>
@@ -28,5 +42,8 @@
   integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
   crossorigin="anonymous"></script>
   <script src="js/scripts.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

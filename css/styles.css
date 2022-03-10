@@ -1,5 +1,4 @@
 #mapContainer {
-  top: 100px;
   backgroundColor: #ccc;
   flex-grow: 1
 }
@@ -12,18 +11,24 @@ html, body {
 
 .container {
   display: flex;
+  flex-direction: column;
   height: 100%;
 }
 
-.sidebar {
-  position: fixed;
-  top: 0px;
-  width: 100%;
-  bottom: 0px;
-  padding: 2px;
+.header {
+  overflow: hidden;
+  background-color: #f1f1f1;
+  padding: 20px 10px;
+  text-align: center;
+  display: inline-flex;
 }
 
-.sidebar h3 {
+.header h3 {
   font-size: 30px;
-  text-align: center;
+}
+
+.sidebar {
+  width: 400px;
+  height: 100%;
+  padding: 15px;
 }

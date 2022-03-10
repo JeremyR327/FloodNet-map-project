@@ -1,86 +1,26 @@
-//
-// var LandUseLookup = (code) => {
-//   switch (code) {
-//     case 1:
-//       return {
-//         color: '#f4f455',
-//         description: '1 & 2 Family',
-//       };
-//     case 2:
-//       return {
-//         color: '#f7d496',
-//         description: 'Multifamily Walk-up',
-//       };
-//     case 3:
-//       return {
-//         color: '#FF9900',
-//         description: 'Multifamily Elevator',
-//       };
-//     case 4:
-//       return {
-//         color: '#f7cabf',
-//         description: 'Mixed Res. & Commercial',
-//       };
-//     case 5:
-//       return {
-//         color: '#ea6661',
-//         description: 'Commercial & Office',
-//       };
-//     case 6:
-//       return {
-//         color: '#d36ff4',
-//         description: 'Industrial & Manufacturing',
-//       };
-//     case 7:
-//       return {
-//         color: '#dac0e8',
-//         description: 'Transportation & Utility',
-//       };
-//     case 8:
-//       return {
-//         color: '#5CA2D1',
-//         description: 'Public Facilities & Institutions',
-//       };
-//     case 9:
-//       return {
-//         color: '#8ece7c',
-//         description: 'Open Space & Outdoor Recreation',
-//       };
-//     case 10:
-//       return {
-//         color: '#bab8b6',
-//         description: 'Parking Facilities',
-//       };
-//     case 11:
-//       return {
-//         color: '#5f5f60',
-//         description: 'Vacant Land',
-//       };
-//     case 12:
-//       return {
-//         color: '#5f5f60',
-//         description: 'Other',
-//       };
-//     default:
-//       return {
-//         color: '#5f5f60',
-//         description: 'Other',
-//       };
-//   }
-// };
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiamVyZW15cjMyNyIsImEiOiJja3poZzIxcGgwcG9vMm5xcnY2NmZpcmtiIn0.Psz_nx06Mc4XL7qDq1zwVg'
 
 // lngLat for the fountain in Washington Square Park
 var wspCenter = [-73.907456, 40.720831]
 
+var theData;
+
+$.getJSON('./data/svi.geojson', function(rawData) {
+  console.log( "Data Loaded" );
+  console.log(rawData)
+  theData = rawData
+})
+
+
+
 var map = new mapboxgl.Map({
   container: 'mapContainer', // HTML container id
   style: 'mapbox://styles/mapbox/dark-v9', // style URL
   center: wspCenter, // starting position as [lng, lat]
   zoom: 9.5,
-  // minZoom: 9,
-  // maxZoom: 14
+  minZoom: 8,
+  maxZoom: 14
 });
 
 map.on('load', function() {
@@ -88,6 +28,123 @@ map.on('load', function() {
     type: 'geojson',
     // Use a URL for the value for the `data` property.
     data: './data/sensorLocations.geojson'
+  });
+
+  map.addSource('svi', {
+    type: 'geojson',
+    data: './data/svi.geojson'
+  })
+
+  map.addLayer({
+    id: 'sviTheme1-fill',
+    type: 'fill',
+    source: 'svi',
+    paint: {
+      'fill-opacity': 0.6,
+      'fill-color': [
+        'interpolate',
+        ['linear'],
+        ['get', 'RPL_THEME1'],
+        -999,
+        'transparent',
+        0,
+        '#fee5d9',
+        0.22,
+        '#fcbba1',
+        0.44,
+        '#fc9272',
+        0.64,
+        '#fb6a4a',
+        0.82,
+        '#de2d26',
+        1,
+        '#a50f15',
+      ]
+    }
+  });
+
+  map.addLayer({
+    id: 'sviTheme2-fill',
+    type: 'fill',
+    source: 'svi',
+    paint: {
+      'fill-opacity': 0.6,
+      'fill-color': [
+        'interpolate',
+        ['linear'],
+        ['get', 'RPL_THEME2'],
+        -999,
+        'transparent',
+        0,
+        '#fee5d9',
+        0.16,
+        '#fcbba1',
+        0.35,
+        '#fc9272',
+        0.54,
+        '#fb6a4a',
+        0.76,
+        '#de2d26',
+        1,
+        '#a50f15',
+      ]
+    }
+  });
+
+  map.addLayer({
+    id: 'sviTheme3-fill',
+    type: 'fill',
+    source: 'svi',
+    paint: {
+      'fill-opacity': 0.6,
+      'fill-color': [
+        'interpolate',
+        ['linear'],
+        ['get', 'RPL_THEME3'],
+        -999,
+        'transparent',
+        0,
+        '#fee5d9',
+        0.38,
+        '#fcbba1',
+        0.57,
+        '#fc9272',
+        0.73,
+        '#fb6a4a',
+        0.87,
+        '#de2d26',
+        1,
+        '#a50f15',
+      ]
+    }
+  });
+
+  map.addLayer({
+    id: 'sviTheme4-fill',
+    type: 'fill',
+    source: 'svi',
+    paint: {
+      'fill-opacity': 0.6,
+      'fill-color': [
+        'interpolate',
+        ['linear'],
+        ['get', 'RPL_THEME4'],
+        -999,
+        'transparent',
+        0,
+        '#fee5d9',
+        0.26,
+        '#fcbba1',
+        0.47,
+        '#fc9272',
+        0.66,
+        '#fb6a4a',
+        0.84,
+        '#de2d26',
+        1,
+        '#a50f15',
+      ]
+    }
   });
 
   map.addSource('hightide', {
@@ -106,6 +163,11 @@ map.on('load', function() {
       'fill-outline-color': '#ccc',
     }
   });
+
+    map.setLayoutProperty('sviTheme1-fill', 'visibility', 'none');
+    map.setLayoutProperty('sviTheme2-fill', 'visibility', 'none');
+    map.setLayoutProperty('sviTheme3-fill', 'visibility', 'none');
+    map.setLayoutProperty('sviTheme4-fill', 'visibility', 'none');
   //
   // map.setPaintProperty('nyu-study-area-fill', 'fill-color', [
   //   'match',
@@ -131,8 +193,11 @@ map.on('load', function() {
     'source': 'sensors',
     'paint': {
       'circle-color': 'goldenrod',
+      'circle-stroke-color': 'steelblue',
+      'circle-stroke-width': 2,
+      'circle-stroke-opacity': 0.6,
       'circle-opacity': 0.8,
-      'circle-radius': ['*', 1.1, ['number', ['get', 'mag']]],
+      'circle-radius': 5,
     }
   });
 
@@ -181,5 +246,123 @@ map.on('load', function() {
     popup.setLngLat(coordinates).setHTML(popupContent).addTo(map);
   });
 
+  $('#toggle-theme1').on('click', function() {
+    var visibility = map.getLayoutProperty('sviTheme1-fill', 'visibility');
+    if (visibility === 'none') {
+      map.setLayoutProperty('sviTheme1-fill', 'visibility', 'visible');
+      map.setLayoutProperty('sviTheme2-fill', 'visibility', 'none');
+      map.setLayoutProperty('sviTheme3-fill', 'visibility', 'none');
+      map.setLayoutProperty('sviTheme4-fill', 'visibility', 'none');
+    }
+    else {
+      map.setLayoutProperty('sviTheme1-fill', 'visibility', 'none');
+    }
+});
+
+  $('#toggle-theme2').on('click', function() {
+    var visibility = map.getLayoutProperty('sviTheme2-fill', 'visibility');
+    if (visibility === 'none') {
+      map.setLayoutProperty('sviTheme2-fill', 'visibility', 'visible');
+      map.setLayoutProperty('sviTheme1-fill', 'visibility', 'none');
+      map.setLayoutProperty('sviTheme3-fill', 'visibility', 'none');
+      map.setLayoutProperty('sviTheme4-fill', 'visibility', 'none');
+    }
+    else {
+      map.setLayoutProperty('sviTheme2-fill', 'visibility', 'none');
+    }
+  });
+
+  $('#toggle-theme3').on('click', function() {
+    var visibility = map.getLayoutProperty('sviTheme3-fill', 'visibility');
+    if (visibility === 'none') {
+      map.setLayoutProperty('sviTheme3-fill', 'visibility', 'visible');
+      map.setLayoutProperty('sviTheme1-fill', 'visibility', 'none');
+      map.setLayoutProperty('sviTheme2-fill', 'visibility', 'none');
+      map.setLayoutProperty('sviTheme4-fill', 'visibility', 'none');
+    }
+    else {
+      map.setLayoutProperty('sviTheme3-fill', 'visibility', 'none');
+    }
+  });
+
+  $('#toggle-theme4').on('click', function() {
+    var visibility = map.getLayoutProperty('sviTheme4-fill', 'visibility');
+    if (visibility === 'none') {
+      map.setLayoutProperty('sviTheme4-fill', 'visibility', 'visible');
+      map.setLayoutProperty('sviTheme1-fill', 'visibility', 'none');
+      map.setLayoutProperty('sviTheme2-fill', 'visibility', 'none');
+      map.setLayoutProperty('sviTheme3-fill', 'visibility', 'none');
+    }
+    else {
+      map.setLayoutProperty('sviTheme4-fill', 'visibility', 'none');
+    }
+  });
+
+  $('#toggle-flood').on('click', function() {
+    var visibility = map.getLayoutProperty('hightide-fill', 'visibility');
+    if (visibility === 'none') {
+      map.setLayoutProperty('hightide-fill', 'visibility', 'visible');
+    }
+    else {
+      map.setLayoutProperty('hightide-fill', 'visibility', 'none');
+    }
+  });
+
+// Highlight and Select Census Track
+// initialize a source with dummy data
+  map.addSource('selected-feature', {
+    type: 'geojson',
+    data: {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -13.7109375,
+          34.88593094075317
+        ]
+      }
+    }
+  });
+
+  map.addLayer({
+    id: 'selected-feature-fill',
+    type: 'fill',
+    source: 'selected-feature',
+    paint: {
+      'fill-opacity': 0.5,
+      'fill-color': 'yellow'
+    }
+  });
+
+  map.addLayer({
+    id: 'selected-feature-line',
+    type: 'line',
+    source: 'selected-feature',
+    paint: {
+      'line-color': 'gray',
+      'line-width': 2,
+      'line-opacity':0.5,
+      'line-dasharray': [1, 1]
+    }
+  });
+
+
+  map.on('click', function(e) {
+    var features = map.queryRenderedFeatures(e.point)
+    var featureOfInterestProperties = features[0].properties
+
+
+
+    var censusTract = featureOfInterestProperties['LOCATION']
+    // look up the feature in cleanData that matches this boro_cd code
+    featureOfInterestGeometry = theData.features.find(function(feature) {
+      return feature.properties['LOCATION'] === censusTract
+    })
+    console.log(theData)
+    console.log('the geometry', featureOfInterestGeometry)
+    // use this geometry to update the source for the selected layer
+    map.getSource('selected-feature').setData(featureOfInterestGeometry)
+  });
 
 })
