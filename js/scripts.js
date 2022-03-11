@@ -12,6 +12,13 @@ $.getJSON('./data/svi.geojson', function(rawData) {
   theData = rawData
 })
 
+$('#reset-map').on('click', function() {
+  // when this is clicked, let's fly the map to Midtown Manhattan
+  map.flyTo({
+    center: [-73.907456, 40.720831],
+    zoom: 9.5
+  })
+})
 
 
 var map = new mapboxgl.Map({
@@ -187,13 +194,55 @@ map.on('load', function() {
   //   /* other */ '#000'
   // ]);
 
+  map.on('mouseenter', 'sviTheme1-fill', function(e) {
+    // Change the cursor style as a UI indicator.
+    map.getCanvas().style.cursor = 'pointer';
+  });
+
+  map.on('mouseleave', 'sviTheme1-fill', function(e) {
+    map.getCanvas().style.cursor = '';
+    popup.remove()
+  });
+
+  map.on('mouseenter', 'sviTheme2-fill', function(e) {
+    // Change the cursor style as a UI indicator.
+    map.getCanvas().style.cursor = 'pointer';
+  });
+
+  map.on('mouseleave', 'sviTheme2-fill', function(e) {
+    map.getCanvas().style.cursor = '';
+    popup.remove()
+  });
+
+  map.on('mouseenter', 'sviTheme3-fill', function(e) {
+    // Change the cursor style as a UI indicator.
+    map.getCanvas().style.cursor = 'pointer';
+  });
+
+  map.on('mouseleave', 'sviTheme3-fill', function(e) {
+    // Change the cursor style as a UI indicator.
+    map.getCanvas().style.cursor = '';
+    popup.remove()
+  });
+
+  map.on('mouseenter', 'sviTheme4-fill', function(e) {
+    // Change the cursor style as a UI indicator.
+    map.getCanvas().style.cursor = 'pointer';
+  });
+
+  map.on('mouseleave', 'sviTheme4-fill', function(e) {
+    // Change the cursor style as a UI indicator.
+    map.getCanvas().style.cursor = '';
+    popup.remove()
+  });
+
   map.addLayer({
     'id': 'sensors-circle',
     'type': 'circle',
     'source': 'sensors',
     'paint': {
-      'circle-color': 'goldenrod',
-      'circle-stroke-color': 'steelblue',
+      'circle-color': 'MidnightBlue',
+      'circle-stroke-color': 'azure',
       'circle-stroke-width': 2,
       'circle-stroke-opacity': 0.6,
       'circle-opacity': 0.8,
