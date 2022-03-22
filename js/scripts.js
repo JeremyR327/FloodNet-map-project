@@ -18,7 +18,7 @@ var dummy_geojson = {
   }
 }
 
-$.getJSON('./data/svi.geojson', function(rawData) {
+$.getJSON('./data/nta_svi.geojson', function(rawData) {
   console.log( "Data Loaded" );
   console.log(rawData)
   theData = rawData
@@ -43,12 +43,16 @@ var map = new mapboxgl.Map({
 });
 map.addControl(new mapboxgl.NavigationControl());
 
+// Add Sensor location source
+
 map.on('load', function() {
   map.addSource('sensors', {
     type: 'geojson',
     // Use a URL for the value for the `data` property.
     data: './data/sensorLocations.geojson'
   });
+
+  // Add Floodplain Geojson layers
 
   map.addSource('2020_100yr', {
     type: 'geojson',
@@ -61,19 +65,59 @@ map.on('load', function() {
     'type': 'fill',
     'source': '2020_100yr',
     'paint': {
-      'fill-color': 'lightblue',
-      'fill-opacity': 0.3,
+      'fill-color': '#add8e6',
+      'fill-opacity': 0.7,
       'fill-outline-color': '#ccc',
     }
   });
 
-  map.setLayoutProperty('2020_100yr-fill', 'visibility', 'none');
-  map.moveLayer('2020_100yr-fill');
+  // map.addSource('2020_500yr', {
+  //   type: 'geojson',
+  //   // Use a URL for the value for the `data` property.
+  //   data: './data/SLR_2020s_500yr_floodplain.geojson'
+  // });
+  //
+  // map.addLayer({
+  //   'id': '2020_500yr-fill',
+  //   'type': 'fill',
+  //   'source': '2020_500yr',
+  //   'paint': {
+  //     'fill-color': '#adade6',
+  //     'fill-opacity': 0.7,
+  //     'fill-outline-color': '#ccc',
+  //   }
+  // });
 
+  map.addSource('2050_100yr', {
+    type: 'geojson',
+    // Use a URL for the value for the `data` property.
+    data: './data/SLR_2050s_100yr_floodplain.geojson'
+  });
+
+  map.addLayer({
+    'id': '2050_100yr-fill',
+    'type': 'fill',
+    'source': '2050_100yr',
+    'paint': {
+      'fill-color': '#adade6',
+      'fill-opacity': 0.7,
+      'fill-outline-color': '#ccc',
+    }
+  });
+
+
+
+  map.setLayoutProperty('2020_100yr-fill', 'visibility', 'none');
+  map.setLayoutProperty('2050_100yr-fill', 'visibility', 'none');
+
+
+// Add Social Vulnerability Data Layers
+
+let hoveredStateId = null;
 
   map.addSource('svi', {
     type: 'geojson',
-    data: './data/svi.geojson'
+    data: './data/nta_svi.geojson'
   })
 
   map.addLayer({
@@ -81,18 +125,15 @@ map.on('load', function() {
     type: 'fill',
     source: 'svi',
     paint: {
-      'fill-opacity': 0.6,
       'fill-color': [
         'interpolate',
         ['linear'],
         ['get', 'RPL_THEME1'],
-        -999,
-        'transparent',
-        0,
+        0.04,
         '#fee5d9',
-        0.22,
+        0.24,
         '#fcbba1',
-        0.44,
+        0.46,
         '#fc9272',
         0.64,
         '#fb6a4a',
@@ -100,9 +141,15 @@ map.on('load', function() {
         '#de2d26',
         1,
         '#a50f15',
-      ]
+      ],
+      'fill-opacity': [
+        'case',
+        ['boolean', ['feature-state', 'hover'], false],
+        1,
+        0.6
+]
     }
-  });
+  }, '2020_100yr-fill');
 
   map.addLayer({
     id: 'sviTheme2-fill',
@@ -114,23 +161,21 @@ map.on('load', function() {
         'interpolate',
         ['linear'],
         ['get', 'RPL_THEME2'],
-        -999,
-        'transparent',
-        0,
+        0.02,
         '#fee5d9',
-        0.16,
+        0.15,
         '#fcbba1',
         0.35,
         '#fc9272',
-        0.54,
+        0.51,
         '#fb6a4a',
-        0.76,
+        0.71,
         '#de2d26',
-        1,
+        0.94,
         '#a50f15',
       ]
     }
-  });
+  }, '2020_100yr-fill');
 
   map.addLayer({
     id: 'sviTheme3-fill',
@@ -158,7 +203,7 @@ map.on('load', function() {
         '#a50f15',
       ]
     }
-  });
+  }, '2020_100yr-fill');
 
   map.addLayer({
     id: 'sviTheme4-fill',
@@ -186,6 +231,27 @@ map.on('load', function() {
         '#a50f15',
       ]
     }
+  },'2020_100yr-fill');
+
+  // add sensor fill and hover layer
+
+  map.addLayer({
+    'id': 'sensors-circle',
+    'type': 'circle',
+    'source': 'sensors',
+    'paint': {
+      'circle-color': 'MidnightBlue',
+      'circle-stroke-color': 'azure',
+      'circle-stroke-width': [
+        'case',
+        ['boolean', ['feature-state', 'hover'], false],
+        10,
+        2
+],
+      'circle-stroke-opacity': 0.6,
+      'circle-opacity': 0.8,
+      'circle-radius': 5,
+    }
   });
 
     map.setLayoutProperty('sviTheme1-fill', 'visibility', 'none');
@@ -197,6 +263,8 @@ map.on('load', function() {
   map.on('mouseenter', 'sviTheme1-fill', function(e) {
     // Change the cursor style as a UI indicator.
     map.getCanvas().style.cursor = 'pointer';
+
+
   });
 
   map.on('mouseleave', 'sviTheme1-fill', function(e) {
@@ -207,6 +275,7 @@ map.on('load', function() {
   map.on('mouseenter', 'sviTheme2-fill', function(e) {
     // Change the cursor style as a UI indicator.
     map.getCanvas().style.cursor = 'pointer';
+    map.setLayoutProperty('sviTheme2-fill', 'fill-opacity', 1);
   });
 
   map.on('mouseleave', 'sviTheme2-fill', function(e) {
@@ -236,21 +305,40 @@ map.on('load', function() {
     popup.remove()
   });
 
-  map.addLayer({
-    'id': 'sensors-circle',
-    'type': 'circle',
-    'source': 'sensors',
-    'paint': {
-      'circle-color': 'MidnightBlue',
-      'circle-stroke-color': 'azure',
-      'circle-stroke-width': 2,
-      'circle-stroke-opacity': 0.6,
-      'circle-opacity': 0.8,
-      'circle-radius': 5,
-    }
-  });
+    let floodID = null;
+
+    map.on('mousemove', 'sensors', function(event){
+
+      // If quakeID for the hovered feature is not null,
+      // use removeFeatureState to reset to the default behavior
+      if (floodID) {
+        map.removeFeatureState({
+          source: 'sensors',
+          id: 'sensors-circle'
+        });
+      }
+
+      floodID = event.features[0].id;
+
+      // When the mouse moves over the earthquakes-viz layer, update the
+      // feature state for the feature under the mouse
+      map.setFeatureState(
+        {
+          source: 'sensors',
+          id: 'sensor-circle'
+        },
+        {
+          hover: true
+        }
+      );
+    });
 
   // Create a popup, but don't add it to the map yet.
+  const hoverpopup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false
+    });
+
   const popup = new mapboxgl.Popup({
     closeButton: false,
     closeOnClick: true
@@ -258,16 +346,26 @@ map.on('load', function() {
 
   map.on('mouseenter', 'sensors-circle', function(e) {
     // Change the cursor style as a UI indicator.
-    map.getCanvas().style.cursor = 'pointer';
+    map.getCanvas().style.cursor = 'pointer'
+    // Copy coordinates array.
+    const coordinates = e.features[0].geometry.coordinates.slice();
+    const street = e.features[0].properties.Street;
+
+    // Ensure that if the map is zoomed out such that multiple
+    // copies of the feature are visible, the popup appears
+    // over the copy being pointed to.
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
+
+    var hoverpopupContent = `<h7><strong>${street}</strong></h7>`
+
+    // Populate the popup and set its coordinates
+    // based on the feature found.
+    popup.setLngLat(coordinates).setHTML(hoverpopupContent).addTo(map);
   });
 
-  map.on('mouseleave', 'sensors-circle', function(e) {
-    map.getCanvas().style.cursor = '';
-    popup.remove()
-  });
-
-  map.on('mouseenter', 'sensors-circle', function(e) {
-    // Change the cursor style as a UI indicator.
+  map.on('click', 'sensors-circle', function(e) {
 
     // Copy coordinates array.
     const coordinates = e.features[0].geometry.coordinates.slice();
@@ -284,10 +382,11 @@ map.on('load', function() {
     }
 
     var popupContent = `
-      <h4>${street}</h4>
+      <h5>${street}</h5>
         <p><strong>Neighborhood:</strong> ${nhood}</p>
         <p><strong>Mounted To:</strong> ${mountTo}</p>
         <p><strong>Mounted Over:</strong> ${mountOver}</p>
+        <iframe src="https://floodnet-grafana.sonycproject.com/d-solo/jU-HInknk/rooftop-rig?orgId=1&refresh=5s&from=1647283686954&to=1647888486954&theme=light&panelId=2" width="100%" height="200" frameborder="0"></iframe>
     `
 
     // Populate the popup and set its coordinates
@@ -349,6 +448,13 @@ map.on('load', function() {
   $('#2020s-btn').on('click', function() {
     var visibility = map.getLayoutProperty('2020_100yr-fill', 'visibility');
       map.setLayoutProperty('2020_100yr-fill', 'visibility', 'visible');
+      map.setLayoutProperty('2050_100yr-fill', 'visibility', 'none');
+  });
+
+  $('#2050s-btn').on('click', function() {
+      map.setLayoutProperty('2020_100yr-fill', 'visibility', 'none');
+      map.setLayoutProperty('2050_100yr-fill', 'visibility', 'visible');
+
   });
 
 // Highlight and Select Census Track
@@ -419,6 +525,7 @@ map.on('load', function() {
 
 $(".btn-flood").click(function(e) {
  map.setLayoutProperty('2020_100yr-fill', 'visibility', 'none');
+ map.setLayoutProperty('2050_100yr-fill', 'visibility', 'none');
  $(".flood-group .btn-check").removeClass("active");
 });
 
@@ -441,34 +548,66 @@ $(function() {
     var features = map.queryRenderedFeatures(e.point)
     var featureOfInterestProperties = features[0].properties
 
-    var censusTract = featureOfInterestProperties['LOCATION']
+    var ntaCode = featureOfInterestProperties['ntacode']
     // look up the feature in cleanData that matches this boro_cd code
     featureOfInterestGeometry = theData.features.find(function(feature) {
-      return feature.properties['LOCATION'] === censusTract
+      return feature.properties['ntacode'] === ntaCode
     })
     console.log(theData)
     console.log('the geometry', featureOfInterestGeometry)
     // use this geometry to update the source for the selected layer
     map.getSource('selected-feature').setData(featureOfInterestGeometry)
 
-    var tract = featureOfInterestProperties["LOCATION"].split(',').slice(0,2)
+    var ntaname = featureOfInterestProperties["ntaname"]
+    var boroname = featureOfInterestProperties["boroname"]
     var pop = featureOfInterestProperties["E_TOTPOP"]
     var theme1 = featureOfInterestProperties['RPL_THEME1']
     var theme2 = featureOfInterestProperties['RPL_THEME2']
     var theme3 = featureOfInterestProperties['RPL_THEME3']
     var theme4 = featureOfInterestProperties['RPL_THEME4']
 
-    $('#sidebar-content-area').html(`
-      <h4>${tract}</h4>
-      <p><strong>2010 Population:</strong> ${pop}</p>
-      <p><strong>Socieconomic Status</strong>: ${theme1}</p>
-      <p><strong>Household Composition & Disability:</strong> ${theme2}</p>
-      <p><strong>Minority Status and Language:</strong> ${theme3}</p>
-      <p><strong>Housing Type & Transportation:</strong> ${theme4}</p>
-    `)
+    var pov = featureOfInterestProperties["EP_POV"]
+    var unemp = featureOfInterestProperties["EP_UNEMP"]
+    var pci = featureOfInterestProperties["EP_PCI"]
+    var nohsdp = featureOfInterestProperties["EP_NOHSDP"]
 
+    var visibility1 = map.getLayoutProperty('sviTheme1-fill', 'visibility');
+    var visibility2 = map.getLayoutProperty('sviTheme2-fill', 'visibility');
+    var visibility3 = map.getLayoutProperty('sviTheme3-fill', 'visibility');
+    var visibility4 = map.getLayoutProperty('sviTheme4-fill', 'visibility');
+
+    if (visibility1 === 'visible') {
+      $('#sidebar-content-area').html(`
+        <h4>${ntaname} (${boroname})</h4>
+        <h7><strong>SVI Score: </strong> ${theme1}</h7>
+        <p><strong>2010 Population: </strong> ${pop}</p>
+        <p><strong>% Below Poverty Line: </strong>${pov}</p>
+        <p><strong>Unemployment Rate: </strong>${unemp}</p>
+        <p><strong>Per Capita Income: </strong>${pci}</p>
+        <p><strong>$ w/o HS Degree: </strong>${nohsdp}</p>
+      `);
+    } else if (visibility2 === 'visible') {
+      $('#sidebar-content-area').html(`
+        <h4>${ntaname} (${boroname})</h4>
+        <h5><strong>SVI Score:</strong> ${theme2}</h5>
+        <p><strong>2010 Population:</strong> ${pop}</p>
+        `);
+    } else if (visibility3 === 'visible') {
+      $('#sidebar-content-area').html(`
+        <h4>${ntaname} (${boroname})</h4>
+        <h5><strong>SVI Score:</strong> ${theme3}</h5>
+        <p><strong>2010 Population:</strong> ${pop}</p>`);
+    } else if (visibility4 === 'visible') {
+      $('#sidebar-content-area').html(`
+        <h4>${ntaname} (${boroname})</h4>
+        <h5><strong> SVI Score:</strong> ${theme4}</h5>
+        <p><strong>2010 Population:</strong> ${pop}</p>`)
+    } else {
+    }
   });
-
-
+// <h5><strong>SVI Metric - Socioeconimic Status:</strong> ${theme2}</h5>
+// <h5><strong>SVI Metric - Household Composition & Disability:</strong> ${theme2}</h5>
+// <h5><strong>SVI Metric - Minority Status and Language:</strong> ${theme3}</h5>
+// <h5><strong> SVI Metric - Housing Type & Transportation:</strong> ${theme4}</h5>
 
 })

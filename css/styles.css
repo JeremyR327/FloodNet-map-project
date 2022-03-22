@@ -10,10 +10,19 @@
   flex-grow: 1
 }
 
+/*popup tweaks */
+.mapboxgl-popup-content {
+  line-height: 5px;
+}
+
+.mapboxgl-popup-content h7 {
+  line-height: 20px;
+}
+
 .centerbold {
   text-align: center;
   font-weight: 800;
-  border-top: 1px solid darkgray;
+  border-top: 2px solid darkgray;
 }
 
 html, body {
@@ -22,7 +31,7 @@ html, body {
   font-family: sans-serif;
 }
 
-.container {
+.body-container {
   display: flex;
   /* flex-direction: column; */
   height: 100%;
@@ -44,13 +53,12 @@ html, body {
 }
 
 .list-group {
-  padding-left: 30px;
   padding-bottom: 30px;
   padding-top: 5px;
 }
 
 #sidebar-content-area {
-border-top: 1.5px solid black;
+border-top: 2px solid black;
 }
 
 #sidebar-content-area h4 {
@@ -83,9 +91,18 @@ border-top: 1.5px solid black;
 
 }
 
-#flood-select {
+.flood-select-div {
   margin-bottom: 10px;
+  display: flex;
+  vertical-align: middle;
+}
 
+.flood-select-div p {
+  padding-right: 2px;
+}
+
+.btn {
+  background-color: white;
 }
 
 /* pretty button, from https://getcssscan.com/css-buttons-examples */
@@ -99,7 +116,7 @@ border-top: 1.5px solid black;
   font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
   border-radius: 6px;
   border: none;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   cursor: pointer;
   color: #fff;
   background: linear-gradient(180deg, #4B91F7 0%, #367AF6 100%);
