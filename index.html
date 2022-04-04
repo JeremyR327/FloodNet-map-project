@@ -22,8 +22,6 @@
     <!-- Navbar brand -->
       <a class="navbar-brand" id='reset-map'>FloodNet NYC Interactive Sensor Location Map</h3></a>
 
-
-
     <!-- Collapsible wrapper -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
@@ -52,7 +50,7 @@
         <img id='logo' src='https://www.floodnet.nyc/wp-content/uploads/2021/04/floodnet_logomark-2.png'>
         <p class='centerbold'>Social Vulnerability Index (SVI)</p>
         <!-- <input type="checkbox" checked data-toggle="toggle" data-on="Hide" data-off="Show"> -->
-         <button class="button-10 btn-primary" type="button" data-toggle="collapse" data-target=".list-group" aria-expanded="false" aria-controls=".list-group">Show Census Tract SVI Layers</button>
+         <button class="button-10 btn-svi" type="button" data-toggle="collapse" data-target=".list-group" aria-expanded="false" aria-controls=".list-group">Show Census Tract SVI Layers</button>
           <div class="collapse list-group">
           <button type="button" id='toggle-theme1' class="list-group-item list-group-item-action">Socioeconomic Status</button>
           <button type="button" id='toggle-theme2' class="list-group-item list-group-item-action">Household Composition & Disability</button>
@@ -60,7 +58,7 @@
           <button type="button" id='toggle-theme4' class="list-group-item list-group-item-action">Housing Type & Transportation</button>
           </div>
           <p class='centerbold'>Flood Modeling</p>
-          <button class="button-10 btn-flood" type="button" data-toggle="collapse" data-target=".flood-group" aria-expanded="false" aria-controls=".flood-group">Show Floodplain Layers</button>
+          <button class="button-10 btn-flood" type="button" data-toggle="collapse" data-target=".flood-group" aria-expanded="false" aria-controls=".flood-group">Show Sea Level Rise Layers</button>
           <div class="collapse flood-group" role="group" aria-label="radio button groups">
               <div class=flood-select-div id='flood-year'>
                 <p>Decade:</p>
@@ -75,6 +73,16 @@
                 <label class="btn btn-outline-primary" for="100yr-btn">100-year</label>
                 <input type="radio" class="btn-check" name="btnradio2" id="500yr-btn" autocomplete="off">
                 <label class="btn btn-outline-primary" for="500yr-btn">500-year</label>
+              </div>
+          </div>
+          <button class="button-10 btn-flood2" type="button" data-toggle="collapse" data-target=".flood2-group" aria-expanded="false" aria-controls=".flood2-group">Show Floodplain Layers</button>
+          <div class="collapse flood2-group" role="group" aria-label="radio button groups">
+              <div class=flood-type-div>
+                <p>Flood Type:</p>
+                <input type="radio" class="btn-check" name="btnradio" id="moderate-btn" autocomplete="off">
+                <label class="btn btn-outline-primary" for="moderate-btn">Moderate</label>
+                <input type="radio" class="btn-check" name="btnradio" id="extreme-btn" autocomplete="off">
+                <label class="btn btn-outline-primary" for="extreme-btn">Extreme</label>
               </div>
           </div>
         <div id='sidebar-content-area'>

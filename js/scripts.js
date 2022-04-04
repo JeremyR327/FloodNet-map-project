@@ -105,10 +105,45 @@ map.on('load', function() {
     }
   });
 
-
-
   map.setLayoutProperty('2020_100yr-fill', 'visibility', 'none');
   map.setLayoutProperty('2050_100yr-fill', 'visibility', 'none');
+
+  map.addSource('moderate_flood', {
+    type: 'geojson',
+    // Use a URL for the value for the `data` property.
+    data: './data/moderate_flood_small.geojson'
+  });
+
+  map.addLayer({
+    'id': 'moderate_flood-fill',
+    'type': 'fill',
+    'source': 'moderate_flood',
+    'paint': {
+      'fill-color': '#add8e6',
+      'fill-opacity': 0.7,
+      'fill-outline-color': '#ccc',
+    }
+  });
+
+  map.addSource('extreme_flood', {
+    type: 'geojson',
+    // Use a URL for the value for the `data` property.
+    data: './data/extreme_flood_small.geojson'
+  });
+
+  map.addLayer({
+    'id': 'extreme_flood-fill',
+    'type': 'fill',
+    'source': 'extreme_flood',
+    'paint': {
+      'fill-color': '#adade6',
+      'fill-opacity': 0.7,
+      'fill-outline-color': '#ccc',
+    }
+  });
+
+  map.setLayoutProperty('moderate_flood-fill', 'visibility', 'none');
+  map.setLayoutProperty('extreme_flood-fill', 'visibility', 'none');
 
 
 // Add Social Vulnerability Data Layers
@@ -365,6 +400,12 @@ let hoveredStateId = null;
     popup.setLngLat(coordinates).setHTML(hoverpopupContent).addTo(map);
   });
 
+  map.on('mouseleave', 'sensors-circle', function(e) {
+    // Change the cursor style as a UI indicator.
+    hoverpopup.remove()
+  });
+
+
   map.on('click', 'sensors-circle', function(e) {
 
     // Copy coordinates array.
@@ -394,6 +435,8 @@ let hoveredStateId = null;
     popup.setLngLat(coordinates).setHTML(popupContent).addTo(map);
   });
 
+
+
   var reset_highlight = function() {
     console.log('resetting!')
     map.getSource('selected-feature').setData(dummy_geojson)
@@ -401,7 +444,7 @@ let hoveredStateId = null;
     $('#sidebar-content-area').empty()
   }
 
-  $('.btn-primary').on('click', function() {
+  $('.btn-svi').on('click', function() {
     reset_highlight()
     map.setLayoutProperty('sviTheme1-fill', 'visibility', 'none');
     map.setLayoutProperty('sviTheme2-fill', 'visibility', 'none');
@@ -457,6 +500,16 @@ let hoveredStateId = null;
 
   });
 
+  $('#moderate-btn').on('click', function() {
+      map.setLayoutProperty('moderate_flood-fill', 'visibility', 'visible');
+      map.setLayoutProperty('extreme_flood-fill', 'visibility', 'none');
+  });
+
+  $('#extreme-btn').on('click', function() {
+      map.setLayoutProperty('moderate_flood-fill', 'visibility', 'none');
+      map.setLayoutProperty('extreme_flood-fill', 'visibility', 'visible');
+  });
+
 // Highlight and Select Census Track
 // initialize a source with dummy data
   map.addSource('selected-feature', {
@@ -504,12 +557,12 @@ let hoveredStateId = null;
    $(e.target).addClass("active");
   });
 
-  $(".btn-primary").click(function(e) {
+  $(".btn-svi").click(function(e) {
    $(".list-group .list-group-item").removeClass("active");
   });
 
   $(function() {
-    var btn = $(".btn-primary");
+    var btn = $(".btn-svi");
     var toggled = false;
     btn.on("click", function() {
         if(!toggled)
@@ -531,6 +584,30 @@ $(".btn-flood").click(function(e) {
 
 $(function() {
   var btn = $(".btn-flood");
+  var toggled = false;
+  btn.on("click", function() {
+      if(!toggled)
+      {
+        toggled = true;
+        btn.text("Hide Sea Level Rise Layers");
+      } else {
+        toggled = false;
+        btn.text("Show Sea Level Rise Layers");
+      }
+  });
+});
+
+$(".btn-flood2").click(function(e) {
+ console.log('HIDE ALL LAYERS!')
+ map.setLayoutProperty('2020_100yr-fill', 'visibility', 'none');
+ map.setLayoutProperty('2050_100yr-fill', 'visibility', 'none');
+ map.setLayoutProperty('moderate_flood-fill', 'visibility', 'none');
+ map.setLayoutProperty('extreme_flood-fill', 'visibility', 'none');
+ $(".flood2-group .btn-check").removeClass("active");
+});
+
+$(function() {
+  var btn = $(".btn-flood2");
   var toggled = false;
   btn.on("click", function() {
       if(!toggled)
