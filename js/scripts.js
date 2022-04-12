@@ -148,8 +148,6 @@ map.on('load', function() {
 
 // Add Social Vulnerability Data Layers
 
-let hoveredStateId = null;
-
   map.addSource('svi', {
     type: 'geojson',
     data: './data/nta_svi.geojson'
@@ -268,6 +266,36 @@ let hoveredStateId = null;
     }
   },'2020_100yr-fill');
 
+  let hoveredArea = null;
+
+  map.on('mousemove', 'sviTheme1-fill', function(e) {
+    if (e.features.length > 0) {
+        if (hoveredArea !== null) {
+          map.setFeatureState(
+            { source: 'svi', id: hoveredArea },
+            { hover: false }
+            );
+        }
+        hoveredArea = e.features[0].properties['ntacode'];
+        map.setFeatureState(
+          { source: 'svi', id: hoveredArea },
+          { hover: true }
+        );
+      }
+    });
+
+  // When the mouse leaves the state-fill layer, update the feature state of the
+  // previously hovered feature.
+  map.on('mouseleave', 'sviTheme1-fill', () => {
+  if (hoveredArea !== null) {
+  map.setFeatureState(
+  { source: 'svi', id: hoveredArea },
+  { hover: false }
+  );
+  }
+  hoveredStateId = null;
+  });
+
   // add sensor fill and hover layer
 
   map.addLayer({
@@ -310,7 +338,6 @@ let hoveredStateId = null;
   map.on('mouseenter', 'sviTheme2-fill', function(e) {
     // Change the cursor style as a UI indicator.
     map.getCanvas().style.cursor = 'pointer';
-    map.setLayoutProperty('sviTheme2-fill', 'fill-opacity', 1);
   });
 
   map.on('mouseleave', 'sviTheme2-fill', function(e) {
@@ -339,34 +366,6 @@ let hoveredStateId = null;
     map.getCanvas().style.cursor = '';
     popup.remove()
   });
-
-    let floodID = null;
-
-    map.on('mousemove', 'sensors', function(event){
-
-      // If quakeID for the hovered feature is not null,
-      // use removeFeatureState to reset to the default behavior
-      if (floodID) {
-        map.removeFeatureState({
-          source: 'sensors',
-          id: 'sensors-circle'
-        });
-      }
-
-      floodID = event.features[0].id;
-
-      // When the mouse moves over the earthquakes-viz layer, update the
-      // feature state for the feature under the mouse
-      map.setFeatureState(
-        {
-          source: 'sensors',
-          id: 'sensor-circle'
-        },
-        {
-          hover: true
-        }
-      );
-    });
 
   // Create a popup, but don't add it to the map yet.
   const hoverpopup = new mapboxgl.Popup({
@@ -527,30 +526,6 @@ let hoveredStateId = null;
     }
   });
 
-  map.addSource('hover-feature', {
-    type: 'geojson',
-    data: {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -13.7109375,
-          34.88593094075317
-        ]
-      }
-    }
-  });
-
-  map.addLayer({
-    id: 'hover-feature-fill',
-    type: 'fill',
-    source: 'hover-feature',
-    paint: {
-      'fill-opacity': 0.5,
-      'fill-color': 'navy'
-    }
-  });
 
   $(".list-group .list-group-item").click(function(e) {
    $(".list-group .list-group-item").removeClass("active");
@@ -568,10 +543,10 @@ let hoveredStateId = null;
         if(!toggled)
         {
           toggled = true;
-          btn.text("Hide Census Tract SVI Layers");
+          btn.text("Hide Neighborhood SVI Layers");
         } else {
           toggled = false;
-          btn.text("Show Census Tract SVI Layers");
+          btn.text("Show Neighborhood SVI Layers");
         }
     });
 });
@@ -624,6 +599,7 @@ $(function() {
   map.on('click', function(e) {
     var features = map.queryRenderedFeatures(e.point)
     var featureOfInterestProperties = features[0].properties
+    var newbutton = '<button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">Toggle bottom offcanvas</button>'
 
     var ntaCode = featureOfInterestProperties['ntacode']
     // look up the feature in cleanData that matches this boro_cd code
@@ -656,13 +632,13 @@ $(function() {
     if (visibility1 === 'visible') {
       $('#sidebar-content-area').html(`
         <h4>${ntaname} (${boroname})</h4>
-        <h7><strong>SVI Score: </strong> ${theme1}</h7>
-        <p><strong>2010 Population: </strong> ${pop}</p>
-        <p><strong>% Below Poverty Line: </strong>${pov}</p>
-        <p><strong>Unemployment Rate: </strong>${unemp}</p>
-        <p><strong>Per Capita Income: </strong>${pci}</p>
-        <p><strong>$ w/o HS Degree: </strong>${nohsdp}</p>
-      `);
+        <h5><strong>SVI Score: </strong> ${theme1}</h5>
+        <p><strong>2010 Population: </strong> ${pop}</p>`
+        // <p><strong>% Below Poverty Line: </strong>${pov}</p>
+        // <p><strong>Unemployment Rate: </strong>${unemp}</p>
+        // <p><strong>Per Capita Income: </strong>${pci}</p>
+        // <p><strong>$ w/o HS Degree: </strong>${nohsdp}</p>
+      );
     } else if (visibility2 === 'visible') {
       $('#sidebar-content-area').html(`
         <h4>${ntaname} (${boroname})</h4>

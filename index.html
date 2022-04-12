@@ -18,7 +18,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark " style="background-color:#33485d;border-bottom: 1px solid #5e5e5e;">
   <!-- Container wrapper -->
     <div class="container-fluid">
-      <img id='navlogo' src='https://www.floodnet.nyc/wp-content/uploads/2021/04/floodnet_logomark-2.png'>
+      <a href='https://www.floodnet.nyc/'> <img id='navlogo' src='https://www.floodnet.nyc/wp-content/uploads/2021/04/floodnet_logomark-2.png'></a>
     <!-- Navbar brand -->
       <a class="navbar-brand" id='reset-map'>FloodNet NYC Interactive Sensor Location Map</h3></a>
 
@@ -50,7 +50,7 @@
         <img id='logo' src='https://www.floodnet.nyc/wp-content/uploads/2021/04/floodnet_logomark-2.png'>
         <p class='centerbold'>Social Vulnerability Index (SVI)</p>
         <!-- <input type="checkbox" checked data-toggle="toggle" data-on="Hide" data-off="Show"> -->
-         <button class="button-10 btn-svi" type="button" data-toggle="collapse" data-target=".list-group" aria-expanded="false" aria-controls=".list-group">Show Census Tract SVI Layers</button>
+         <button class="button-10 btn-svi" type="button" data-bs-toggle="collapse" data-bs-target=".list-group" aria-expanded="false" aria-controls=".list-group">Show Neighborhood SVI Layers</button>
           <div class="collapse list-group">
           <button type="button" id='toggle-theme1' class="list-group-item list-group-item-action">Socioeconomic Status</button>
           <button type="button" id='toggle-theme2' class="list-group-item list-group-item-action">Household Composition & Disability</button>
@@ -58,7 +58,7 @@
           <button type="button" id='toggle-theme4' class="list-group-item list-group-item-action">Housing Type & Transportation</button>
           </div>
           <p class='centerbold'>Flood Modeling</p>
-          <button class="button-10 btn-flood" type="button" data-toggle="collapse" data-target=".flood-group" aria-expanded="false" aria-controls=".flood-group">Show Sea Level Rise Layers</button>
+          <button class="button-10 btn-flood" type="button" data-bs-toggle="collapse" data-bs-target=".flood-group" aria-expanded="false" aria-controls=".flood-group">Show Sea Level Rise Layers</button>
           <div class="collapse flood-group" role="group" aria-label="radio button groups">
               <div class=flood-select-div id='flood-year'>
                 <p>Decade:</p>
@@ -67,17 +67,17 @@
                 <input type="radio" class="btn-check" name="btnradio" id="2050s-btn" autocomplete="off">
                 <label class="btn btn-outline-primary" for="2050s-btn">2050s</label>
               </div>
-              <div class=flood-select-div id='flood-type'>
+              <!-- <div class=flood-select-div id='flood-type'>
                 <p>Flood Event:</p>
                 <input type="radio" class="btn-check" name="btnradio2" id="100yr-btn" autocomplete="off">
                 <label class="btn btn-outline-primary" for="100yr-btn">100-year</label>
                 <input type="radio" class="btn-check" name="btnradio2" id="500yr-btn" autocomplete="off">
                 <label class="btn btn-outline-primary" for="500yr-btn">500-year</label>
-              </div>
+              </div> -->
           </div>
-          <button class="button-10 btn-flood2" type="button" data-toggle="collapse" data-target=".flood2-group" aria-expanded="false" aria-controls=".flood2-group">Show Floodplain Layers</button>
+          <button class="button-10 btn-flood2" type="button" data-bs-toggle="collapse" data-bs-target=".flood2-group" aria-expanded="false" aria-controls=".flood2-group">Show Floodplain Layers</button>
           <div class="collapse flood2-group" role="group" aria-label="radio button groups">
-              <div class=flood-type-div>
+              <div class=flood-select-div>
                 <p>Flood Type:</p>
                 <input type="radio" class="btn-check" name="btnradio" id="moderate-btn" autocomplete="off">
                 <label class="btn btn-outline-primary" for="moderate-btn">Moderate</label>
@@ -85,6 +85,7 @@
                 <label class="btn btn-outline-primary" for="extreme-btn">Extreme</label>
               </div>
           </div>
+
         <div id='sidebar-content-area'>
 
         </div>
@@ -103,8 +104,8 @@
   crossorigin="anonymous"></script>
   <script src="js/scripts.js"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
   <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 </body>
 </html>
